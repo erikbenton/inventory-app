@@ -90,6 +90,7 @@
         <!-- Label -->
         <TextView
             android:text="@string/category_description"
+            android:layout_gravity="start"
             style="@style/CategoryStyle" />
 
         <!-- Description field -->
