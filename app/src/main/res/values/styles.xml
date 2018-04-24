@@ -38,7 +38,7 @@
     <style name="EditorUnitsStyle">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_alignLeft">true</item>
         <item name="android:paddingRight">0dp</item>
         <item name="android:paddingTop">16dp</item>
         <item name="android:textAppearance">?android:textAppearanceSmall</item>

@@ -58,7 +58,7 @@
             style="@style/CategoryStyle" />
 
         <!-- Input fields -->
-        <LinearLayout
+        <RelativeLayout
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:layout_weight="2"
@@ -74,9 +74,10 @@
             <EditText
                 android:id="@+id/edit_item_price"
                 android:hint="@string/hint_item_price"
+                android:gravity="right"
                 android:inputType="number"
                 style="@style/EditorFieldStyle" />
-        </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
 
     <!-- Description category -->
