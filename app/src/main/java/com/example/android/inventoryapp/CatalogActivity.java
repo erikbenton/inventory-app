@@ -5,6 +5,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -46,5 +47,21 @@ public class CatalogActivity extends AppCompatActivity
         // This adds menu items to the app bar.
         getMenuInflater().inflate(R.menu.menu_catalog, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        // User clicked on an options menu item
+        switch (item.getItemId())
+        {
+            case R.id.action_insert_dummy_data:
+                // Insert the dummy data
+                return true;
+            case R.id.action_delete_all_data:
+                // Delete all the entries
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

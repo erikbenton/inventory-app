@@ -36,4 +36,10 @@
 
     <!-- Label for inserting dummy data from Catalog menu -->
     <string name="action_delete_all_data">Delete all data</string>
+
+    <!-- Label for saving in the Editor -->
+    <string name="action_save">Save</string>
+
+    <!-- Label for deleting a single entry from Editor -->
+    <string name="action_delete">Delete</string>
 </resources>

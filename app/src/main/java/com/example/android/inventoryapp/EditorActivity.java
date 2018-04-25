@@ -2,6 +2,8 @@ package com.example.android.inventoryapp;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 public class EditorActivity extends AppCompatActivity
 {
@@ -11,5 +13,30 @@ public class EditorActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        // Inflate the menu options from the res/menu/menu_catalog.xml file.
+        // This adds menu items to the app bar.
+        getMenuInflater().inflate(R.menu.menu_editor, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        // User clicked on an options menu item
+        switch (item.getItemId())
+        {
+            case R.id.action_save:
+                // Save the item
+                return true;
+            case R.id.action_delete:
+                // Delete all the entries
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
