@@ -30,4 +30,10 @@
 
     <!-- Units for price of the item ($) [CHAR LIMIT=5] -->
     <string name="unit_item_price">$</string>
+
+    <!-- Label for inserting dummy data from Catalog menu -->
+    <string name="action_insert_dummy_data">Insert dummy data</string>
+
+    <!-- Label for inserting dummy data from Catalog menu -->
+    <string name="action_delete_all_data">Delete all data</string>
 </resources>
