@@ -2,6 +2,7 @@ package com.example.android.inventoryapp.data;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
+import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -9,6 +10,24 @@ import android.support.annotation.Nullable;
 
 public class ItemProvider extends ContentProvider
 {
+    // Constants for URI matcher
+    private static final int ITEMS   = 100;
+    private static final int ITEM_ID = 101;
+
+    // Creating Uri matcher
+    private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+
+    // Creating Uri patterns for given paths
+    static
+    {
+        sUriMatcher.addURI(ItemContract.CONTENT_AUTHORITY, ItemContract.PATH_ITEMS, ITEMS);
+        sUriMatcher.addURI(ItemContract.CONTENT_AUTHORITY, ItemContract.PATH_ITEMS + "/#", ITEM_ID);
+    }
+
+    // Database Helper Object
+    private ItemDbHelper mDbHelper;
+
+
 
     @Override
     public boolean onCreate()
