@@ -20,7 +20,7 @@ public class ItemDbHelper extends SQLiteOpenHelper
                     ItemEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     ItemEntry.COL_ITEM_NAME + TEXT_TYPE + NOT_NULL_TYPE + COMMA_SEP +
                     ItemEntry.COL_ITEM_STOCK + INTEGER_TYPE + NOT_NULL_TYPE + COMMA_SEP +
-                    ItemEntry.COL_ITEM_PRICE + TEXT_TYPE + NOT_NULL_TYPE + COMMA_SEP +
+                    ItemEntry.COL_ITEM_PRICE + INTEGER_TYPE + NOT_NULL_TYPE + COMMA_SEP +
                     ItemEntry.COL_ITEM_DESCRIP+ TEXT_TYPE + ");";
 
     private static final String SQL_DELETE_ENTRIES =
