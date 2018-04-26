@@ -20,6 +20,8 @@ public class ItemProvider extends ContentProvider
     private static final int ITEMS   = 100;
     private static final int ITEM_ID = 101;
 
+
+
     // Creating Uri matcher
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -153,6 +155,44 @@ public class ItemProvider extends ContentProvider
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs)
     {
-        return 0;
+        // Get the Uri match
+        int match = sUriMatcher.match(uri);
+
+        // Use switch to determine what to do with the Uri
+        switch (match)
+        {
+            case ITEMS:
+                // Perform update to all the items from the database
+                return updateItem(uri, values, selection, selectionArgs);
+            case ITEM_ID:
+                // Set up the selection
+                selection = ItemEntry._ID + "=?";
+
+                // Get the Item ID from the Uri
+                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+
+                // Update the given Item
+                return updateItem(uri, values, selection, selectionArgs);
+            default:
+                throw new IllegalArgumentException("Cannot open unknown URI " + uri);
+        }
+    }
+
+    private int updateItem(Uri uri, ContentValues values, String selection, String[] selectionArgs)
+    {
+        // Check the size of the values
+        if(values.size() == 0)
+        {
+            return 0;
+        }
+
+        // Notify all Listeners that the data for this Item has changed
+        getContext().getContentResolver().notifyChange(uri, null);
+
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+        // Update the selected Items in the inventory with the given ContentValues
+        int numRows = db.update(ItemEntry.TABLE_NAME, values, selection, selectionArgs);
+        return numRows;
     }
 }

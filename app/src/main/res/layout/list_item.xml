@@ -41,6 +41,7 @@
         android:gravity="right|center"
         android:textAppearance="?android:textAppearanceLarge"
         android:textColor="#2B3D4D"
+        android:padding="@dimen/activity_margin"
         tools:text="5"/>
 
 </LinearLayout>

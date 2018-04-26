@@ -42,4 +42,10 @@
 
     <!-- Label for deleting a single entry from Editor -->
     <string name="action_delete">Delete</string>
+
+    <!-- Text for if inserting an Item fails -->
+    <string name="editor_insert_item_failed">Error with saving item</string>
+
+    <!-- Text for if inserting an Item is successful -->
+    <string name="editor_insert_item_successful">Item saved</string>
 </resources>
