@@ -10,6 +10,8 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.example.android.inventoryapp.data.ItemContract.ItemEntry;
+
+import android.util.Log;
 import android.widget.CursorAdapter;
 
 public class ItemProvider extends ContentProvider
@@ -93,9 +95,53 @@ public class ItemProvider extends ContentProvider
 
     @Nullable
     @Override
-    public Uri insert(@NonNull Uri uri, @Nullable ContentValues values)
+    public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues)
     {
-        return null;
+        final int match = sUriMatcher.match(uri);
+
+        switch (match)
+        {
+            case ITEMS:
+                return insertItem(uri, contentValues);
+            default:
+                throw new IllegalArgumentException("Insertion is not supported for " + uri);
+        }
+    }
+
+    /**
+     * Insert an Item into the database with the given content values. Return the new content URI
+     * for that specific row in the database
+     */
+    private Uri insertItem(Uri uri, ContentValues values)
+    {
+
+        // Data validation checks
+        //dataValidation(values);
+
+        // Get the writable database
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+        // Get the id of the entry
+        long id = db.insert(ItemEntry.TABLE_NAME, null, values);
+
+        // Insert data into table
+        if(id == -1)
+        {
+            Log.v("INSERTING ITEM INFO", "Unable to insert " + values.get(ItemEntry.COL_ITEM_NAME).toString());
+            return null;
+        }
+        else
+        {
+            Log.v("CatalogActivity", "New row ID: " + id);
+        }
+
+        // Notify all Listeners that the data has changed for the Item content URI
+        // uri: content://com.example.android.inventoryapp/items
+        getContext().getContentResolver().notifyChange(uri, null);
+
+        // Once we know the ID of the new row in the table,
+        // return the new URI with the ID appended to the end of it
+        return ContentUris.withAppendedId(uri, id);
     }
 
     @Override
