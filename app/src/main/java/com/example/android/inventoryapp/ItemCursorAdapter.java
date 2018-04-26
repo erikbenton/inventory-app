@@ -42,7 +42,7 @@ public class ItemCursorAdapter extends CursorAdapter
         // Populate the fields with the extracted data
         nameView.setText(name);
         priceView.setText("$" + (price/100) + "." + (price%100));
-        stockView.setText(stock);
+        stockView.setText(stock + "");
 
     }
 }

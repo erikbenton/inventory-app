@@ -1,7 +1,11 @@
 package com.example.android.inventoryapp;
 
+import android.app.LoaderManager;
 import android.content.ContentValues;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -9,13 +13,17 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.example.android.inventoryapp.data.ItemContract.ItemEntry;
 
-public class CatalogActivity extends AppCompatActivity
+public class CatalogActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>
 {
+
+    private CursorAdapter mItemCursorAdapter;
+    private final static int ITEM_LOADER = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -24,11 +32,11 @@ public class CatalogActivity extends AppCompatActivity
         setContentView(R.layout.activity_catalog);
 
         // Find ListView to populate
-        ListView petListView = findViewById(R.id.list);
+        ListView itemListView = findViewById(R.id.list);
 
         // Find and set EmptyView
         View emptyView = findViewById(R.id.empty_view);
-        petListView.setEmptyView(emptyView);
+        itemListView.setEmptyView(emptyView);
 
         // Setup FAB to open EditorActivity
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -41,6 +49,15 @@ public class CatalogActivity extends AppCompatActivity
                 startActivity(intent);
             }
         });
+
+        // Init the loader
+        getLoaderManager().initLoader(ITEM_LOADER, null, this);
+
+        // Re-establish the ItemCursorAdapter
+        mItemCursorAdapter = new ItemCursorAdapter(this, null);
+
+        // Attach the CursorAdapter to the ListView
+        itemListView.setAdapter(mItemCursorAdapter);
 
     }
 
@@ -103,5 +120,32 @@ public class CatalogActivity extends AppCompatActivity
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args)
+    {
+        // Define projection for query
+        // Get the ID, Name, Stock, Price
+        String[] projection = {
+                ItemEntry._ID,
+                ItemEntry.COL_ITEM_NAME,
+                ItemEntry.COL_ITEM_STOCK,
+                ItemEntry.COL_ITEM_PRICE
+        };
+
+        return new CursorLoader(this, ItemEntry.CONTENT_URI, projection, null, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor)
+    {
+        mItemCursorAdapter.swapCursor(cursor);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader)
+    {
+        mItemCursorAdapter.swapCursor(null);
     }
 }
