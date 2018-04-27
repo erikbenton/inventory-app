@@ -48,4 +48,6 @@
 
     <!-- Text for if inserting an Item is successful -->
     <string name="editor_insert_item_successful">Item saved</string>
+    <string name="editor_activity_title_new_item">Add item</string>
+    <string name="editor_activity_title_edit_item">Edit item</string>
 </resources>

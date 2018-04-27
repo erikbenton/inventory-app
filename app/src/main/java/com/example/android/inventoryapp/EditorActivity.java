@@ -1,17 +1,23 @@
 package com.example.android.inventoryapp;
 
+import android.app.LoaderManager;
 import android.content.ContentValues;
+import android.content.CursorLoader;
+import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.inventoryapp.data.ItemContract.ItemEntry;
 
-public class EditorActivity extends AppCompatActivity
+public class EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>
 {
 
     // Globals for all the EditText views
@@ -20,11 +26,40 @@ public class EditorActivity extends AppCompatActivity
     private EditText mPriceEditText;
     private EditText mDescripEditText;
 
+    // Global if Uri is sent for editing
+    private Uri mContentItemUri;
+
+    // ID for the loader
+    private static final int ITEM_EDIT_LOADER = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
+
+        // If sent with an Intent, grab it
+        Intent sentIntent = getIntent();
+        mContentItemUri = sentIntent.getData();
+
+        // Set the title of the EditorActivity on which situation we have
+        // If the EditorActivity was opened using the ListView item, then we will
+        // have URI of Item to change app bar to say "Edit Item"
+        // Otherwise if this is a new Item, URI is null so change app to say "Add Item"
+        if(mContentItemUri == null)
+        {
+            // Clicking on the FAB for adding a pet
+            setTitle(R.string.editor_activity_title_new_item);
+        }
+        else
+        {
+            // Clicking on the FAB for adding a pet
+            setTitle(R.string.editor_activity_title_edit_item);
+
+            // Init loader for getting data
+            // Init the loader
+            getLoaderManager().initLoader(ITEM_EDIT_LOADER, null, this);
+        }
 
         // Setting up all the EditText views
         mNameEditText    = findViewById(R.id.edit_item_name);
@@ -107,5 +142,56 @@ public class EditorActivity extends AppCompatActivity
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args)
+    {
+        // Define projection for query
+        // Get the ID, Name, Stock, Price
+        String[] projection = {
+                ItemEntry._ID,
+                ItemEntry.COL_ITEM_NAME,
+                ItemEntry.COL_ITEM_STOCK,
+                ItemEntry.COL_ITEM_PRICE,
+                ItemEntry.COL_ITEM_DESCRIP
+        };
+
+        return new CursorLoader(this, mContentItemUri, projection, null, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor)
+    {
+        // Cursor check
+        if(cursor == null || (cursor != null && cursor.getCount() == 0))
+        {
+            return;
+        }
+
+        // Move to first position in cursor
+        cursor.moveToFirst();
+
+        // Get the attributes of the pet to fill View with
+        String itemName = cursor.getString((cursor.getColumnIndex(ItemEntry.COL_ITEM_NAME)));
+        int itemStock = cursor.getInt((cursor.getColumnIndex(ItemEntry.COL_ITEM_STOCK)));
+        int itemPrice = cursor.getInt((cursor.getColumnIndex(ItemEntry.COL_ITEM_PRICE)));
+        String itemDescrip = cursor.getString((cursor.getColumnIndex(ItemEntry.COL_ITEM_DESCRIP)));
+
+        // Give the views the appropriate values
+        mNameEditText.setText(itemName, TextView.BufferType.EDITABLE);
+        mStockEditText.setText(itemStock + "", TextView.BufferType.EDITABLE);
+        mPriceEditText.setText("$" + (itemPrice/100) + "." + (itemPrice%100), TextView.BufferType.EDITABLE);
+        mDescripEditText.setText(itemDescrip, TextView.BufferType.EDITABLE);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader)
+    {
+        // Give the views the appropriate values
+        mNameEditText.setText("", TextView.BufferType.EDITABLE);
+        mStockEditText.setText("", TextView.BufferType.EDITABLE);
+        mPriceEditText.setText("", TextView.BufferType.EDITABLE);
+        mDescripEditText.setText("", TextView.BufferType.EDITABLE);
     }
 }
