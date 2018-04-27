@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -73,16 +74,34 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         // Getting Item values
         String name    = mNameEditText.getText().toString().trim();
         int    stock   = Integer.parseInt(mStockEditText.getText().toString().trim());
-        int    price   = Integer.parseInt(mPriceEditText.getText().toString().trim());
+        int    price;
         String descrip = mDescripEditText.getText().toString().trim();
 
-        // Create the ContentValues
-        ContentValues values = createEntry(name, stock, price, descrip);
 
-        // Insert the entry
-        Uri newUri = getContentResolver().insert(ItemEntry.CONTENT_URI, values);
 
-        if (newUri == null)
+        int rowsAffected = 0;
+
+        if (mContentItemUri == null)
+        {
+            // Create the ContentValues
+            price   = Integer.parseInt(mPriceEditText.getText().toString().trim());
+            ContentValues values = createEntry(name, stock, price, descrip);
+            // Insert the entry
+            Uri newUri = getContentResolver().insert(ItemEntry.CONTENT_URI, values);
+            rowsAffected++;
+        }
+        else
+        {
+            double priceDouble   = (Double.parseDouble(mPriceEditText.getText().toString().trim().substring(1))*100);
+            price = (int)priceDouble;
+
+            // Create the ContentValues
+            ContentValues values = createEntry(name, stock, price, descrip);
+
+            rowsAffected = getContentResolver().update(mContentItemUri, values, null, null);
+        }
+
+        if (rowsAffected == 0)
         {
             // If the new content URI is null, then there was an error with insertion.
             Toast.makeText(this, getString(R.string.editor_insert_item_failed),
