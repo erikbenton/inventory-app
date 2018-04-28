@@ -90,13 +90,6 @@ public class ItemProvider extends ContentProvider
 
     @Nullable
     @Override
-    public String getType(@NonNull Uri uri)
-    {
-        return null;
-    }
-
-    @Nullable
-    @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues)
     {
         final int match = sUriMatcher.match(uri);
@@ -149,7 +142,26 @@ public class ItemProvider extends ContentProvider
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs)
     {
-        return 0;
+        // Get writable database
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+        // Notify Listeners that the data has changed for the Item to be deleted
+        getContext().getContentResolver().notifyChange(uri, null);
+
+        // Get the match for the Uri
+        int match = sUriMatcher.match(uri);
+
+        switch (match)
+        {
+            case ITEMS:
+                return db.delete(ItemEntry.TABLE_NAME, selection, selectionArgs);
+            case ITEM_ID:
+                selection = ItemEntry._ID + "=?";
+                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                return db.delete(ItemEntry.TABLE_NAME, selection, selectionArgs);
+            default:
+                throw new IllegalArgumentException("Delete is not supported for " + uri);
+        }
     }
 
     @Override
@@ -194,5 +206,25 @@ public class ItemProvider extends ContentProvider
         // Update the selected Items in the inventory with the given ContentValues
         int numRows = db.update(ItemEntry.TABLE_NAME, values, selection, selectionArgs);
         return numRows;
+    }
+
+    /**
+     * Returns the MIME type of data for the content URI.
+     */
+    @Override
+    public String getType(Uri uri)
+    {
+        // Get the match for the URI
+        final int match = sUriMatcher.match(uri);
+
+        switch (match)
+        {
+            case ITEMS:
+                return ItemEntry.CONTENT_LIST_TYPE;
+            case ITEM_ID:
+                return ItemEntry.CONTENT_ITEM_TYPE;
+            default:
+                throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
+        }
     }
 }

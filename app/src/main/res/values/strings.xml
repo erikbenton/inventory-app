@@ -50,4 +50,12 @@
     <string name="editor_insert_item_successful">Item saved</string>
     <string name="editor_activity_title_new_item">Add item</string>
     <string name="editor_activity_title_edit_item">Edit item</string>
+    <string name="unsaved_changes_dialog_msg">There are unsaved changes</string>
+    <string name="discard">Discard</string>
+    <string name="keep_editing">Keep editing</string>
+    <string name="delete_dialog_msg">Delete this item?</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="editor_delete_item_failed">Failed to delete item</string>
+    <string name="editor_delete_item_successful">Item was deleted successfully</string>
 </resources>
