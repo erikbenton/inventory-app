@@ -37,11 +37,23 @@ public class ItemCursorAdapter extends CursorAdapter
         // Extract data from the cursor
         String name  = cursor.getString((cursor.getColumnIndex(ItemEntry.COL_ITEM_NAME)));
         int price    = cursor.getInt((cursor.getColumnIndex(ItemEntry.COL_ITEM_PRICE)));
+        int priceDollars = price / 100;
+        int priceCents = price % 100;
         int stock    = cursor.getInt((cursor.getColumnIndex(ItemEntry.COL_ITEM_STOCK)));
 
         // Populate the fields with the extracted data
         nameView.setText(name);
-        priceView.setText("$" + (price/100) + "." + (price%100));
+
+        // Show the right number of decimal places for the given amount of cents
+        if(priceCents > 9)
+        {
+            priceView.setText("$" + priceDollars + "." + priceCents);
+        }
+        else
+        {
+            priceView.setText("$" + priceDollars + ".0" + priceCents);
+        }
+
         stockView.setText(stock + "");
 
     }

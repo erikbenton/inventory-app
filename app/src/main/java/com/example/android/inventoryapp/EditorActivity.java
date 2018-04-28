@@ -197,10 +197,22 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         int itemPrice = cursor.getInt((cursor.getColumnIndex(ItemEntry.COL_ITEM_PRICE)));
         String itemDescrip = cursor.getString((cursor.getColumnIndex(ItemEntry.COL_ITEM_DESCRIP)));
 
+        int priceDollars = itemPrice / 100;
+        int priceCents = itemPrice % 100;
+
         // Give the views the appropriate values
         mNameEditText.setText(itemName, TextView.BufferType.EDITABLE);
         mStockEditText.setText(itemStock + "", TextView.BufferType.EDITABLE);
-        mPriceEditText.setText("$" + (itemPrice/100) + "." + (itemPrice%100), TextView.BufferType.EDITABLE);
+
+        if(priceCents > 9)
+        {
+            mPriceEditText.setText("$" + priceDollars + "." + priceCents, TextView.BufferType.EDITABLE);
+        }
+        else
+        {
+            mPriceEditText.setText("$" + priceDollars + ".0" + priceCents, TextView.BufferType.EDITABLE);
+        }
+
         mDescripEditText.setText(itemDescrip, TextView.BufferType.EDITABLE);
     }
 
