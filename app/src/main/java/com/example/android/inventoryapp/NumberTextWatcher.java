@@ -6,6 +6,10 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 
+/** This is all borrowed from:
+ * https://stackoverflow.com/questions/28757931/how-to-format-the-input-of-edittext-when-typing-with-thousands-separators-in
+ */
+
 public class NumberTextWatcher implements TextWatcher {
 
     private DecimalFormat df;
@@ -20,7 +24,7 @@ public class NumberTextWatcher implements TextWatcher {
         df.setDecimalSeparatorAlwaysShown(true);
         dfnd = new DecimalFormat("#,###");
         this.et = et;
-        hasFractionalPart = false;
+        hasFractionalPart = true;
     }
 
     @SuppressWarnings("unused")
@@ -31,29 +35,40 @@ public class NumberTextWatcher implements TextWatcher {
     {
         et.removeTextChangedListener(this);
 
-        try {
+        try
+        {
             int inilen, endlen;
             inilen = et.getText().length();
 
             String v = s.toString().replace(String.valueOf(df.getDecimalFormatSymbols().getGroupingSeparator()), "");
             Number n = df.parse(v);
             int cp = et.getSelectionStart();
-            if (hasFractionalPart) {
+            if (hasFractionalPart)
+            {
                 et.setText(df.format(n));
-            } else {
+            }
+            else
+            {
                 et.setText(dfnd.format(n));
             }
             endlen = et.getText().length();
             int sel = (cp + (endlen - inilen));
-            if (sel > 0 && sel <= et.getText().length()) {
+            if (sel > 0 && sel <= et.getText().length())
+            {
                 et.setSelection(sel);
-            } else {
+            }
+            else
+            {
                 // place cursor at the end?
                 et.setSelection(et.getText().length() - 1);
             }
-        } catch (NumberFormatException nfe) {
+        }
+        catch (NumberFormatException nfe)
+        {
             // do nothing?
-        } catch (ParseException e) {
+        }
+        catch (ParseException e)
+        {
             // do nothing?
         }
 
@@ -68,12 +83,15 @@ public class NumberTextWatcher implements TextWatcher {
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count)
     {
-        if (s.toString().contains(String.valueOf(df.getDecimalFormatSymbols().getDecimalSeparator())))
-        {
-            hasFractionalPart = true;
-        } else {
-            hasFractionalPart = false;
-        }
+        hasFractionalPart = true;
+//        if (s.toString().contains(String.valueOf(df.getDecimalFormatSymbols().getDecimalSeparator())))
+//        {
+//            hasFractionalPart = true;
+//        }
+//        else
+//        {
+//            hasFractionalPart = false;
+//        }
     }
 
 }
