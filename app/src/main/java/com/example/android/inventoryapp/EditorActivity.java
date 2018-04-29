@@ -85,6 +85,9 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mStockEditText.setOnTouchListener(mTouchListener);
         mPriceEditText.setOnTouchListener(mTouchListener);
         mDescripEditText.setOnTouchListener(mTouchListener);
+
+        // Adding TextWatcher to Price input
+        mPriceEditText.addTextChangedListener(new NumberTextWatcher(mPriceEditText));
     }
 
 
