@@ -10,7 +10,7 @@ import android.widget.EditText;
  * https://stackoverflow.com/questions/28757931/how-to-format-the-input-of-edittext-when-typing-with-thousands-separators-in
  */
 
-public class NumberTextWatcher implements TextWatcher {
+public class PriceTextWatcher implements TextWatcher {
 
     private DecimalFormat df;
     private DecimalFormat dfnd;
@@ -18,7 +18,7 @@ public class NumberTextWatcher implements TextWatcher {
 
     private EditText et;
 
-    public NumberTextWatcher(EditText et)
+    public PriceTextWatcher(EditText et)
     {
         df = new DecimalFormat("#,###.##");
         df.setDecimalSeparatorAlwaysShown(true);
@@ -28,7 +28,7 @@ public class NumberTextWatcher implements TextWatcher {
     }
 
     @SuppressWarnings("unused")
-    private static final String TAG = "NumberTextWatcher";
+    private static final String TAG = "PriceTextWatcher";
 
     @Override
     public void afterTextChanged(Editable s)
@@ -39,6 +39,11 @@ public class NumberTextWatcher implements TextWatcher {
         {
             int inilen, endlen;
             inilen = et.getText().length();
+
+            switch(inilen)
+            {
+                //case
+            }
 
             String v = s.toString().replace(String.valueOf(df.getDecimalFormatSymbols().getGroupingSeparator()), "");
             Number n = df.parse(v);
@@ -78,10 +83,6 @@ public class NumberTextWatcher implements TextWatcher {
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after)
     {
-        if(true)
-        {
-
-        }
     }
 
     @Override
