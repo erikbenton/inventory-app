@@ -99,10 +99,15 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     private View.OnTouchListener mTouchListener = new View.OnTouchListener()
     {
         @Override
-        public boolean onTouch(View view, MotionEvent motionEvent)
+        public boolean onTouch(View view, MotionEvent event)
         {
-            mItemHasChanged = true;
-            return true;
+            if(event.getAction() == MotionEvent.ACTION_DOWN)
+            {
+                mItemHasChanged = true;
+                view.requestFocus();
+                return true;
+            }
+            return false;
         }
     };
 
@@ -284,11 +289,11 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
         if(priceCents > 9)
         {
-            mPriceEditText.setText("$" + priceDollars + "." + priceCents, TextView.BufferType.EDITABLE);
+            mPriceEditText.setText(priceDollars + "." + priceCents, TextView.BufferType.EDITABLE);
         }
         else
         {
-            mPriceEditText.setText("$" + priceDollars + ".0" + priceCents, TextView.BufferType.EDITABLE);
+            mPriceEditText.setText(priceDollars + ".0" + priceCents, TextView.BufferType.EDITABLE);
         }
 
         mDescripEditText.setText(itemDescrip, TextView.BufferType.EDITABLE);
