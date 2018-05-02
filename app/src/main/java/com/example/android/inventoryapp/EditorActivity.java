@@ -134,12 +134,11 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         }
         else
         {
-            double priceDouble   = (Double.parseDouble(mPriceEditText.getText().toString().trim().substring(1))*100);
+            double priceDouble   = (Double.parseDouble(mPriceEditText.getText().toString().trim())*100);
             price = (int)priceDouble;
 
             // Create the ContentValues
             ContentValues values = createEntry(name, stock, price, descrip);
-
             rowsAffected = getContentResolver().update(mContentItemUri, values, null, null);
         }
 
