@@ -20,7 +20,7 @@ public class NumberTextWatcher implements TextWatcher {
 
     public NumberTextWatcher(EditText et)
     {
-        df = new DecimalFormat("#,###.##");
+        df = new DecimalFormat("#,###.00");
         df.setDecimalSeparatorAlwaysShown(true);
         dfnd = new DecimalFormat("#,###");
         this.et = et;
@@ -78,10 +78,6 @@ public class NumberTextWatcher implements TextWatcher {
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after)
     {
-        if(true)
-        {
-
-        }
     }
 
     @Override

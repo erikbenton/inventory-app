@@ -87,7 +87,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mDescripEditText.setOnTouchListener(mTouchListener);
 
         // Adding TextWatcher to Price input
-        mPriceEditText.addTextChangedListener(new NumberTextWatcher(mPriceEditText));
+        //mPriceEditText.addTextChangedListener(new NumberTextWatcher(mPriceEditText));
     }
 
 
@@ -116,17 +116,36 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         // Getting Item values
         String name    = mNameEditText.getText().toString().trim();
         int    stock   = Integer.parseInt(mStockEditText.getText().toString().trim());
+        //int[]    price = {0, 0};
         int    price;
+        int    dollars;
+        int    cents;
         String descrip = mDescripEditText.getText().toString().trim();
 
+        String itemPriceString = mPriceEditText.getText().toString().trim();
+        String[] priceArray = itemPriceString.split("\\.");
+        int priceDollars = Integer.parseInt(priceArray[0]);
+        int priceCents;
 
+        if(priceArray.length == 2)
+        {
+            priceCents = Integer.parseInt(priceArray[1]);
+            while (priceCents > 99)
+            {
+                priceCents /= 10;
+            }
+        }
+        else
+        {
+            priceCents = 0;
+        }
 
         int rowsAffected = 0;
 
         if (mContentItemUri == null)
         {
             // Create the ContentValues
-            price   = Integer.parseInt(mPriceEditText.getText().toString().trim());
+            price   = (priceDollars * 100) + priceCents;
             ContentValues values = createEntry(name, stock, price, descrip);
             // Insert the entry
             Uri newUri = getContentResolver().insert(ItemEntry.CONTENT_URI, values);
@@ -134,8 +153,9 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         }
         else
         {
-            double priceDouble   = (Double.parseDouble(mPriceEditText.getText().toString().trim())*100);
-            price = (int)priceDouble;
+            //double priceDouble   = (Double.parseDouble(mPriceEditText.getText().toString().trim())*100);
+            //price = (int)priceDouble;
+            price   = (priceDollars * 100) + priceCents;
 
             // Create the ContentValues
             ContentValues values = createEntry(name, stock, price, descrip);
@@ -278,6 +298,11 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         int itemStock = cursor.getInt((cursor.getColumnIndex(ItemEntry.COL_ITEM_STOCK)));
         int itemPrice = cursor.getInt((cursor.getColumnIndex(ItemEntry.COL_ITEM_PRICE)));
         String itemDescrip = cursor.getString((cursor.getColumnIndex(ItemEntry.COL_ITEM_DESCRIP)));
+
+        //String itemPriceString = cursor.getString((cursor.getColumnIndex(ItemEntry.COL_ITEM_PRICE)));
+        //String[] priceArray = itemPriceString.split(".");
+        //int priceDollars = Integer.parseInt(priceArray[0]);
+        //int priceCents = Integer.parseInt(priceArray[1]);
 
         int priceDollars = itemPrice / 100;
         int priceCents = itemPrice % 100;
