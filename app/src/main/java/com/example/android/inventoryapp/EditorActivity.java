@@ -85,9 +85,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mStockEditText.setOnTouchListener(mTouchListener);
         mPriceEditText.setOnTouchListener(mTouchListener);
         mDescripEditText.setOnTouchListener(mTouchListener);
-
-        // Adding TextWatcher to Price input
-        //mPriceEditText.addTextChangedListener(new NumberTextWatcher(mPriceEditText));
     }
 
 
@@ -116,26 +113,31 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         // Getting Item values
         String name    = mNameEditText.getText().toString().trim();
         int    stock   = Integer.parseInt(mStockEditText.getText().toString().trim());
-        //int[]    price = {0, 0};
         int    price;
-        int    dollars;
-        int    cents;
         String descrip = mDescripEditText.getText().toString().trim();
 
+        // Preparing for displaying and saving price
+        // First get as string, then split on the decimal point
         String itemPriceString = mPriceEditText.getText().toString().trim();
         String[] priceArray = itemPriceString.split("\\.");
+
+        // Create ints for the price dollars and cents
         int priceDollars = Integer.parseInt(priceArray[0]);
         int priceCents;
 
+        // If there was a decimal place, assess getting how many cents
         if(priceArray.length == 2)
         {
             priceCents = Integer.parseInt(priceArray[1]);
+
+            // If the cents entered -> $0.1234
+            // Then we want this to be -> $0.12
             while (priceCents > 99)
             {
                 priceCents /= 10;
             }
         }
-        else
+        else // Otherwise there are 0 cents
         {
             priceCents = 0;
         }
@@ -153,8 +155,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         }
         else
         {
-            //double priceDouble   = (Double.parseDouble(mPriceEditText.getText().toString().trim())*100);
-            //price = (int)priceDouble;
             price   = (priceDollars * 100) + priceCents;
 
             // Create the ContentValues
@@ -299,11 +299,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         int itemPrice = cursor.getInt((cursor.getColumnIndex(ItemEntry.COL_ITEM_PRICE)));
         String itemDescrip = cursor.getString((cursor.getColumnIndex(ItemEntry.COL_ITEM_DESCRIP)));
 
-        //String itemPriceString = cursor.getString((cursor.getColumnIndex(ItemEntry.COL_ITEM_PRICE)));
-        //String[] priceArray = itemPriceString.split(".");
-        //int priceDollars = Integer.parseInt(priceArray[0]);
-        //int priceCents = Integer.parseInt(priceArray[1]);
-
+        // Breaks down the integer into dollars and cents
         int priceDollars = itemPrice / 100;
         int priceCents = itemPrice % 100;
 
@@ -311,11 +307,12 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mNameEditText.setText(itemName, TextView.BufferType.EDITABLE);
         mStockEditText.setText(itemStock + "", TextView.BufferType.EDITABLE);
 
+        // If there are > 9 cents, display them, otherwise...
         if(priceCents > 9)
         {
             mPriceEditText.setText(priceDollars + "." + priceCents, TextView.BufferType.EDITABLE);
         }
-        else
+        else // ... we have to add in the extra "0"
         {
             mPriceEditText.setText(priceDollars + ".0" + priceCents, TextView.BufferType.EDITABLE);
         }
