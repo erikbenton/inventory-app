@@ -17,7 +17,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 
 import com.example.android.inventoryapp.data.ItemContract.ItemEntry;
 
@@ -41,7 +40,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         itemListView.setEmptyView(emptyView);
 
         // Setup FAB to open EditorActivity
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -87,13 +86,13 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
      */
     private void insertItem()
     {
-        // Creating pet values for inserting
+        // Creating item values for inserting
         ContentValues values = createEntry("Razor Scooter", 5, 12000, "Fun scooter to ride around Alki in Seattle");
 
         // Insert a new row for Toto into the provider using the ContentResolver.
-        // Use the {@link PetEntry#CONTENT_URI} to indicate that we want to insert
-        // into the pets database table.
-        // Receive the new content URI that will allow us to access Toto's data in the future.
+        // Use the {@link ItemEntry#CONTENT_URI} to indicate that we want to insert
+        // into the item database table.
+        // Receive the new content URI that will allow us to access the data in the future.
         Uri newUri = getContentResolver().insert(ItemEntry.CONTENT_URI, values);
     }
 

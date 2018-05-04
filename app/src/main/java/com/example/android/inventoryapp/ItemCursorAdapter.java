@@ -8,10 +8,7 @@ import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 
-import com.example.android.inventoryapp.data.ItemContract;
 import com.example.android.inventoryapp.data.ItemContract.ItemEntry;
-
-import org.w3c.dom.Text;
 
 public class ItemCursorAdapter extends CursorAdapter
 {

@@ -12,7 +12,6 @@ import android.support.annotation.Nullable;
 import com.example.android.inventoryapp.data.ItemContract.ItemEntry;
 
 import android.util.Log;
-import android.widget.CursorAdapter;
 
 public class ItemProvider extends ContentProvider
 {
@@ -109,10 +108,6 @@ public class ItemProvider extends ContentProvider
      */
     private Uri insertItem(Uri uri, ContentValues values)
     {
-
-        // Data validation checks
-        //dataValidation(values);
-
         // Get the writable database
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
